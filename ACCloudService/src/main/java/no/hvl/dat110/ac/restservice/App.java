@@ -46,6 +46,75 @@ public class App {
 		// TODO: implement the routes required for the access control service
 		// as per the HTTP/REST operations describined in the project description
 		
+		post("/accessdevice/log", (req,res) -> {
+			
+			Gson gson = new Gson();
+			
+			AccessMessage a = gson.fromJson(req.body(), AccessMessage.class);
+			
+			int id = accesslog.add(a.getMessage());
+			
+			AccessEntry e = accesslog.get(id);
+			
+			return gson.toJson(e , AccessEntry.class);
+			
+			
+		});
+		
+		
+		
+		get("/accessdevice/log", (req,res) -> {
+			
+			Gson gson = new Gson();
+			
+			return accesslog.toJson();
+			
+		});
+		
+		get("/accessdevice/log/:id", (req,res) -> {
+			
+			Gson gson = new Gson();
+			
+			int id = Integer.parseInt(req.params(":id"));
+			
+			AccessEntry a = accesslog.get(id);
+			
+			return gson.toJson(a,AccessEntry.class);
+			
+		});
+		
+		put("/accessdevice/code", (req,res) -> {
+			
+			Gson gson = new Gson();
+			
+			accesscode = gson.fromJson(req.body(), AccessCode.class);
+			
+			return gson.toJson(accesscode.getAccesscode());
+			
+		});
+		
+		get("/accessdevice/code", (req,res) -> {
+			
+			Gson gson = new Gson();
+			
+			return gson.toJson(accesscode.getAccesscode());
+			
+		});
+		
+		
+		delete("/accessdevice/log", (req,res) -> {
+			
+			Gson gson = new Gson();
+			accesslog.clear();
+			
+			
+			return gson.toJson(accesslog.log + " Accesslog has been deleted");
+			
+		});
+		
+		
+		
+		
     }
     
 }
